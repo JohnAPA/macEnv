@@ -66,8 +66,12 @@
 - 1 Password
 - Photoshop
 - TextSoap
--Cocktail Pilot
--iterm2
+- Cocktail Pilot
+- iterm2
+- Platypus
+- Uberseicht
+- Yabai
+- GeekTool
 
 
 # NodeJS
