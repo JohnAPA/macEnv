@@ -1,55 +1,55 @@
 # macEnv
 
 
--xCode
--WireShark
--VNC Viewerr
--Sublime Text
--Transmit
--Todoist
--The Unarchiver
--Text Expander
--Querious
--Spotify
--Spark
--Soma FM
--Snippets Lab
+- xCode
+- WireShark
+- VNC Viewerr
+- Sublime Text
+- Transmit
+- Todoist
+- The Unarchiver
+- Text Expander
+- Querious
+- Spotify
+- Spark
+- Soma FM
+- Snippets Lab
 --Get All Snippets exported
--Smart JSON Editor
--Skitch
--Site Sucker
--Setapp
---Pathfinder
--Regexrx
--Raspberry Pi Imager
--NetworkKitX
--Network Radar
--MQTTX vs MQTT Explorer
--Mountain Duck
--Moom
--Magnet
--MacForge
--Loadables
--Little Snitch
--Ledger Live
--Keyboard Maestro
--Keypad
--Karabiner
--Key Codes
--iStat Menus
--MacCleaner
--Image2Icon
--IconMaker
--iCleanMemory
--Growl
--Gemini2
--Gopanel
--Chrome
--Github desktop
--Fritzing
--FastScripts
--Exporter for Contacts
--Fantastical
+- Smart JSON Editor
+- Skitch
+- Site Sucker
+- Setapp
+-- Pathfinder
+- Regexrx
+- Raspberry Pi Imager
+- NetworkKitX
+- Network Radar
+- MQTTX vs MQTT Explorer
+- Mountain Duck
+- Moom
+- Magnet
+- MacForge
+- Loadables
+- Little Snitch
+- Ledger Live
+- Keyboard Maestro
+- Keypad
+- Karabiner
+- Key Codes
+- iStat Menus
+- MacCleaner
+- Image2Icon
+- IconMaker
+- iCleanMemory
+- Growl
+- Gemini2
+- Gopanel
+- Chrome
+- Github desktop
+- Fritzing
+- FastScripts
+- Exporter for Contacts
+- Fantastical
 - Duplicate Detective
 - Entangler
 - Dash
@@ -57,25 +57,28 @@
 - Core Tunnel
 - CopyClip
 - Boop
--Bartender 3
+- Bartender 3
 - Balena Etcher
 - Arduino
 - App Maker
 - Alfred
---AND WORKFLOWS
+-- AND WORKFLOWS
 - 1 Password
 - Photoshop
 - TextSoap
+-Cocktail Pilot
+-iterm2
 
 
--NodeJS
---PM2
---Express
--Python 3
--icalbuddy
+- NodeJS
+-- PM2
+-- Express
+- Python 3
+- icalbuddy
 -homebrew
--mosquitto
-
+- mosquitto
+- zsh
+- oh my zsh
 
 
 
@@ -83,23 +86,26 @@
 
 
 #Possible
--TextBar
--System Monitor
--System Designer
--Stylizer7
--Smooth Scroll
--Rsync
--QuickLens
--Insomnia
--Postman
--LiteIcon
+- TextBar
+- System Monitor
+- System Designer
+- Stylizer7
+- Smooth Scroll
+- Rsync
+- QuickLens
+- Insomnia
+- Postman
+- LiteIcon
 - DockShelf
 - Color Snapper 2
--Candy Bar
+- Candy Bar
 - Action Shortcuts
--AB2CSV
+- AB2CSV
 
 
 #Remove
--Termius
--Shift
+- Termius
+- Shift
+
+# Folders
+
