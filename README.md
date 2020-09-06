@@ -43,6 +43,40 @@
 -iCleanMemory
 -Growl
 -Gemini2
+-Gopanel
+-Chrome
+-Github desktop
+-Fritzing
+-FastScripts
+-Exporter for Contacts
+-Fantastical
+- Duplicate Detective
+- Entangler
+- Dash
+- Cura
+- Core Tunnel
+- CopyClip
+- Boop
+-Bartender 3
+- Balena Etcher
+- Arduino
+- App Maker
+- Alfred
+--AND WORKFLOWS
+- 1 Password
+- Photoshop
+- TextSoap
+
+
+-NodeJS
+--PM2
+--Express
+-Python 3
+-icalbuddy
+-homebrew
+-mosquitto
+
+
 
 
 
@@ -59,6 +93,11 @@
 -Insomnia
 -Postman
 -LiteIcon
+- DockShelf
+- Color Snapper 2
+-Candy Bar
+- Action Shortcuts
+-AB2CSV
 
 
 #Remove
