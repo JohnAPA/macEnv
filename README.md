@@ -70,7 +70,7 @@
 -iterm2
 
 
-- NodeJS
+# NodeJS
 -- PM2
 -- Express
 - Python 3
@@ -79,8 +79,36 @@
 - mosquitto
 - zsh
 - oh my zsh
+- Node Red
+- NodeMailer
+- iterm shell integration
 
-
+## Sublime Text Packages
+- Sublime Code Intel
+- JSHint
+- JSHint Gutter
+- FixMyJS
+- Arduino
+- Deviot
+- Trimmer
+- Toggle Quotes
+- DarkMatter Theme
+- SnippetMaker
+-- Snippets Made
+- SideBarTools
+-Sidebar Enhancements
+- Selection Tools
+- Keyboard Navigation
+- Jquery
+- Indentor
+- HTML Beautify
+- ES6
+- Browser Refresh
+- Bracket Highlighter
+- BracketGuard
+- Bracketeer
+- Auto Semicolon / Append Semicolon
+- Append Comma
 
 
 
@@ -102,10 +130,27 @@
 - Action Shortcuts
 - AB2CSV
 
+#brew
+- htop
+- mosquitto
+- preload
+- electron
 
 #Remove
 - Termius
 - Shift
 
 # Folders
+-xSc
+-impDir
+-jsEnv
+-Important Downloads
+- cubeDoc
+- xMod
+-- Alfred
+-.ssh
 
+# Other
+- Contacts
+- Pub/SSH
+- Aliases functions
