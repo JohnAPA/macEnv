@@ -1,0 +1,31 @@
+
+1. on your local computer, open a terminal
+2. type `ssh-keygen -t rsa`
+3. the following prompt comes up:
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/<youruserid>/.ssh/id_rsa):
+4. accept the default (it's in your home directory)
+5. leave passphrase field blank twice
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+6. you will get something similar to the following output
+Your identification has been saved in /home/<youruserid>/.ssh/id_rsa.
+Your public key has been saved in /home/<youruserid>/.ssh/id_rsa.pub.
+The key fingerprint is:
+a6:ca:aa:c7:fb:db:93:77:1d:da:07:c1:99:7c:3f:db <youruserid>@yourcomputer.com
+
+7. This has created a directory, in your home directory named '.ssh'
+8. `cd .ssh`
+9. `cat *.pub`
+This will print to the terminal the contents of your public key.
+This is what you want to put on any remote server that you want passwordless login to.
+10. copy the output
+11. login to the remote server
+12. if the .ssh dir does not exist in your home directory on the remote server, create it.
+13. type the following:
+
+echo '<use the paste command here>' >> authorized_keys
+
+14. you should have pasted the previously copied contents in between the single quotes.
+15. logout, and try logging back in. it should not ask you for a password.
+16. if you have a newer system, you might need an authorized_keys2 file
