@@ -86,6 +86,8 @@
 - Node Red
 - NodeMailer
 - iterm shell integration
+ - jq
+ - duti
 
 ## Sublime Text Packages
 - Sublime Code Intel
@@ -152,7 +154,8 @@
 - cubeDoc
 - xMod
 -- Alfred
--.ssh
+- .ssh
+- cVar
 
 # Other
 - Contacts
