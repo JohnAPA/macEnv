@@ -28,3 +28,5 @@ type in search, and it searches only well known search repos like wikem
 time from: for cva timing
 
 algorhythms integration of mdcalc
+
+make a cVar which is a variable library which calls difficult commands 
