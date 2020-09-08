@@ -72,6 +72,7 @@
 - Uberseicht
 - Yabai
 - GeekTool
+- hazel
 
 
 # NodeJS
