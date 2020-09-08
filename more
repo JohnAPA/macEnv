@@ -1,4 +1,570 @@
-AppleScripts
+# AppleScripts
+----
+
+## Tell Application to quit #applescript
+```
+tell application "Notes" to quit
+```
+
+## Set Bounds of front window
+```
+tell application "Reminders" to set the bounds of the front window to {0, 0, 400, 500}
+```
+## Activate Application
+```
+tell application "Notes" to activate
+```
+## Quit Application
+```
+tell application "Script Editor" to quit
+```
+----
+## Delay
+```
+delay 0.25
+```
+----
+## Do a keystroke
+```
+tell application "System Events"
+    keystroke "w" using command down
+end tell
+```
+----
+## {1: Title}
+```
+keystroke "9" using command down
+```
+-----
+
+
+
+## Useful full script
+```
+(* Applescript to open iTerm session from Finder in current working directory
+ via right mouse click
+ shamelessly stolen from http://peterdowns.com/posts/open-iterm-finder-service.html
+ and https://gist.github.com/lsloan/1265327 *)
+on run {input, parameters}
+  tell application "Finder"
+    set dir_path to quoted form of (POSIX path of (input as alias))
+  end tell
+  CD_to(dir_path)
+end run
+
+on CD_to(theDir)
+  tell application "iTerm"
+    activate
+
+    try
+      set t to the last terminal
+    on error
+      set t to (make new terminal)
+    end try
+
+    tell t
+      launch session "Default Session"
+      tell the last session
+        write text "cd " & theDir & ";clear;"
+      end tell
+    end tell
+  end tell
+end CD_to
+```
+-----
+## Add Folders
+```
+-- Add subfolders to a given parent folder
+on addFolders(pf)
+    tell application "Finder"
+        make new folder at pf with properties {name:"PRINT"}
+        make new folder at pf with properties {name:"Source Files"}
+        make new folder at pf with properties {name:"Art"}
+    end tell
+end addFolders
+```
+-----
+
+## Mail Application: Extract Recipient
+```
+tell application "Mail"
+    set theMessages to selected messages of first message viewer
+    set theMessage to first item of theMessages
+    set allHeaders to all headers of theMessage
+
+    set emailRegex to "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\\b"
+
+    set extractScript to "echo " & quoted form of allHeaders
+    set extractScript to extractScript & " | grep -E '\\b^To:'" -- limit to only the 'To:' header
+    set extractScript to extractScript & " | grep -Eio '" & emailRegex & "' " -- get the actual email
+
+    set extractedEmail to do shell script extractScript
+end tell
+```
+-----
+## Recipient alias: mail
+```
+-- primaryEmail is used to identify the primary account
+set primaryEmail to "my@email.com"
+
+-- a list of domains that the primary account has authority over
+set primaryDomains to {"@email.com", "@name.com", "@somethingelse.com"}
+
+on selectedEmailRecipient()
+    tell application "Mail"
+        set theMessages to selected messages of first message viewer
+        set theMessage to first item of theMessages
+        set allHeaders to all headers of theMessage
+
+        set toEmailRegex to "\\b^To: [A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b"
+        set emailRegex to "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b"
+
+        set extractScript to "echo " & quoted form of allHeaders
+        set extractScript to extractScript & " | grep -Eio '" & toEmailRegex & "' " -- limit to only the To: address
+        set extractScript to extractScript & " | grep -Eio '" & emailRegex & "' " -- get the actual email
+
+        set extractedEmail to do shell script extractScript
+    end tell
+end selectedEmailRecipient
+
+tell application "Mail"
+    set primaryAccount to null
+    try
+        repeat with acc in accounts
+            if email addresses of acc contains primaryEmail then
+                set primaryAccount to acc
+                error 0
+            end if
+        end repeat
+    end try
+
+    if primaryAccount is null then
+        display dialog "Couldnt find that email account"
+        error 0
+    end if
+
+    set accountName to name of primaryAccount
+
+    set newEmails to {}
+    -- always copy the primary email
+    copy primaryEmail to the end of newEmails
+
+    try
+        set recipient to my selectedEmailRecipient()
+        -- check if the recipient is part of our domain
+        repeat with domain in primaryDomains
+            if recipient contains domain then
+                copy recipient to the end of newEmails
+            end if
+        end repeat
+    end try
+
+    set email addresses of account accountName to newEmails
+end tell
+```
+-----
+
+## Insert Path into apple sheet
+```
+set SaveFolderPath to "/tmp"
+
+tell application "System Events"
+    tell process "Safari"
+        tell sheet 1 of window 1
+            set value of text field 1 to SaveFolderPath
+        end tell
+    end tell
+end tell
+```
+-----
+## Open Siblime Text with Pathfinder
+```
+on getSelectedFiles()
+    set selectedFiles to {}
+
+    tell application "Path Finder"
+        set theSelection to selection
+
+        if theSelection is missing value then
+            set targetfolder to target of first finder window
+
+            if targetfolder is not missing value then
+                copy path of targetfolder to the end of selectedFiles
+            end if
+        else
+            repeat with selectedFile in theSelection
+                copy path of selectedFile to the end of selectedFiles
+            end repeat
+        end if
+    end tell
+
+    return selectedFiles
+end getSelectedFiles
+
+on openWithSublimeText(theFiles)
+    tell application "Sublime Text"
+        open theFiles
+        activate
+    end tell
+end openWithSublimeText
+
+on run
+    set selectedFiles to getSelectedFiles()
+
+    if selectedFiles's length is 0 then
+        display alert "Select proper folder or file"
+        return
+    end if
+
+    openWithSublimeText(selectedFiles)
+end run
+```
+-----
+## Open Sublime Text with Finder
+```
+on getSelectedFiles()
+    set selectedFiles to {}
+
+    tell application "Finder"
+        try
+            set theSelection to selection as alias list
+        on error
+            return {}
+        end try
+
+        if theSelection is {} then
+            set targetFolder to target of front Finder window as string
+
+            if targetFolder is not "" and targetFolder is not ":" then
+                set selectedFiles to targetFolder
+            end if
+        else
+            set selectedFiles to theSelection
+        end if
+    end tell
+
+    return selectedFiles
+end getSelectedFiles
+
+on openWithSublimeText(theFiles)
+    tell application "Sublime Text"
+        open theFiles
+        activate
+    end tell
+end openWithSublimeText
+
+on run
+    set selectedFiles to getSelectedFiles()
+
+    if selectedFiles's length is 0 then
+        display alert "Select proper folder or file"
+        return
+    end if
+
+    openWithSublimeText(selectedFiles)
+end run
+```
+-----
+## Open with iTerm on Finder
+```
+on getCurrentFolder()
+    tell application "Finder"
+        set selectionList to (selection as list)
+
+        if length of selectionList is 1 then
+            set firstItem to selectionList's first item
+
+            (**
+             * Selection's item is not accessible.
+             * - When the Finder was just loaded.
+             * - Selection is Network, Remote Disc and so on.
+            **)
+            try
+                set itemKind to kind of firstItem
+            on error
+                return ""
+            end try
+
+            if itemKind is "Folder" or itemKind is "Application" or itemKind is "Volume" then
+                set currentFolder to firstItem as string
+            else
+                set currentFolder to firstItem's container as alias
+            end if
+        else
+            set currentTarget to target of front Finder window as string
+
+            if currentTarget is "" then
+                return ""
+            else
+                set currentFolder to currentTarget
+            end if
+        end if
+
+        return quoted form of POSIX path of currentFolder
+    end tell
+end getCurrentFolder
+
+on openWithiTerm(thePath)
+    tell application "iTerm"
+        activate
+
+        tell current session of current terminal
+            write text "cd" & space & thePath
+        end tell
+    end tell
+end openWithiTerm
+
+on run
+    set currentFolder to getCurrentFolder()
+
+    if currentFolder is "" then
+        display alert "Select only one folder or file"
+        return
+    end if
+
+    openWithiTerm(currentFolder)
+end run
+
+```
+-----
+## Open iTerm with PathFinder
+```
+on getCurrentFolder()
+    tell application "Path Finder"
+        set selectionList to selection as list
+        set firstItem to selectionList's first item
+        set currentTarget to first finder window's target
+
+        if firstItem is not missing value and selectionList's length is 1 then
+            if firstItem's class is fsFolder then
+                set currentFolder to firstItem
+            else
+                set currentFolder to firstItem's container
+            end if
+        else
+            if currentTarget is missing value then
+                return ""
+            else
+                set currentFolder to currentTarget
+            end if
+        end if
+
+        return quoted form of (POSIX path of currentFolder as string)
+    end tell
+end getCurrentFolder
+
+on openWithiTerm(thePath)
+    tell application "iTerm"
+        activate
+
+        tell current session of current terminal
+            write text "cd" & space & thePath
+        end tell
+    end tell
+end openWithiTerm
+
+on run
+    set currentFolder to getCurrentFolder()
+
+    if currentFolder is "" then
+        display alert "Select only one folder or file"
+        return
+    end if
+
+    openWithiTerm(currentFolder)
+end run
+```
+-----
+## Tell App to get the url of front window
+```
+tell application "Google Chrome" to return URL of active tab of window 1
+```
+-----
+
+## Hide Finder Icon in dock when pathfinder is running
+```     
+on run
+    tell application "Path Finder" to launch
+    repeat until application "Path Finder" is running
+        delay 1
+    end repeat
+    try
+        tell application "System Events" to tell UI element "Finder" of list 1 of process "Dock"
+            perform action "AXShowMenu"
+            click menu item "Remove from Dock" of menu 1
+        end tell
+    on error
+        -- Suppress errors if Finder isn't in dock
+    end try
+end run
+```
+Note: open System Preferences > Users & Groups > Login Items and add your script:
+-----
+
+
+
+
+
+#JSA
+## Search and find in Text Expander with JSA
+```
+// Search and Replace.
+//
+// Search and replace plain text content in user-selected set of groups.
+//
+// Copyright 2018 SmileOnMyMac, LLC. See LICENSE.md for license terms.
+
+// Preliminaries
+TextExpander = Application('TextExpander');
+Finder = Application('Finder');
+currentApp = Application.currentApplication();
+currentApp.includeStandardAdditions = true;
+
+// Get sorted list of group names
+groupNames = TextExpander.groups.name().sort();
+
+// Let user pick group(s) to process
+listResult = currentApp.chooseFromList(groupNames, {withTitle:'Groups', withPrompt:'Please pick group(s) to search.', multipleSelectionsAllowed:true, emptySelectionAllowed:false});
+
+// Prompt for search term
+searchTermDialog = currentApp.displayDialog("Enter search term:", {withTitle: "Search", defaultAnswer:""});
+searchTerm = searchTermDialog.textReturned;
+
+// Prompt for replace term
+replaceTerm = undefined;
+if (searchTerm !== undefined) {
+    replaceTermDialog = currentApp.displayDialog("Enter replacement:", {withTitle: "Replace", defaultAnswer:""});
+    replaceTerm = replaceTermDialog.textReturned;
+}
+
+// Search and replace
+if (replaceTerm !== undefined) {
+    console.log(`Replace ${searchTerm} with ${replaceTerm}`);
+    listResult.forEach(function(groupName) {
+        const aGroup = TextExpander.groups.whose({name:{_equals:groupName}})[0];
+        aGroup.snippets().forEach(function(aSnippet) {
+            // Handle search and replace for plain text snippets
+            if (aSnippet.contentType() === 'plain_text') {
+                originalContent = aSnippet.plainTextExpansion();
+                newContent = replaceAll(originalContent, searchTerm, replaceTerm);
+                if (newContent && originalContent !== newContent) {
+                    console.log(`Replace\n${originalContent}\nÉwithÉ\n${newContent}`);                  
+                    aSnippet.plainTextExpansion = newContent;
+                }
+            }
+            if (aSnippet.contentType() === 'html_text') {
+                console.log(`Snippet for abbreviation [${aSnippet.abbreviation()}] is rich text, so we aren't doing any replacing, as we need to do that by traversing the DOM.`);
+            }           
+        });
+    });
+}
+
+// Utility functions
+function escapeRegExp(str) {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+```
+-----
+
+## Work with selection workaround 
+```
+-- Back up clipboard contents:
+set savedClipboard to my fetchStorableClipboard()
+
+set thePasteboard to current application's NSPasteboard's generalPasteboard()
+set theCount to thePasteboard's changeCount()
+-- Copy selected text to clipboard:
+tell application "System Events" to keystroke "c" using {command down}
+-- Check for changed clipboard:
+repeat 20 times
+    if thePasteboard's changeCount() is not theCount then exit repeat
+    delay 0.1
+end repeat
+
+set theSelectedText to the clipboard
+
+-- Makes the selected text all uppercase:
+-- From: http://apple.stackexchange.com/a/171196/184907
+set theModifiedSelectedText to (do shell script ("echo " & theSelectedText & " | tr a-z A-Z;"))
+
+-- Overwrite the old selection with the desired text:
+set the clipboard to theModifiedSelectedText
+tell application "System Events" to keystroke "v" using {command down}
+delay 0.1 -- Without this delay, may restore clipboard before pasting.
+
+-- Instead of the above three lines, you could instead use:
+--      tell application "System Events" to keystroke theModifiedSelectedText
+-- But this way is a little slower.
+
+-- Restore clipboard:
+my putOnClipboard:savedClipboard
+
+use AppleScript version "2.4"
+use scripting additions
+use framework "Foundation"
+use framework "AppKit"
+
+
+on fetchStorableClipboard()
+    set aMutableArray to current application's NSMutableArray's array() -- used to store contents
+    -- get the pasteboard and then its pasteboard items
+    set thePasteboard to current application's NSPasteboard's generalPasteboard()
+    -- loop through pasteboard items
+    repeat with anItem in thePasteboard's pasteboardItems()
+        -- make a new pasteboard item to store existing item's stuff
+        set newPBItem to current application's NSPasteboardItem's alloc()'s init()
+        -- get the types of data stored on the pasteboard item
+        set theTypes to anItem's types()
+        -- for each type, get the corresponding data and store it all in the new pasteboard item
+        repeat with aType in theTypes
+            set theData to (anItem's dataForType:aType)'s mutableCopy()
+            if theData is not missing value then
+                (newPBItem's setData:theData forType:aType)
+            end if
+        end repeat
+        -- add new pasteboard item to array
+        (aMutableArray's addObject:newPBItem)
+    end repeat
+    return aMutableArray
+end fetchStorableClipboard
+
+
+on putOnClipboard:theArray
+    -- get pasteboard
+    set thePasteboard to current application's NSPasteboard's generalPasteboard()
+    -- clear it, then write new contents
+    thePasteboard's clearContents()
+    thePasteboard's writeObjects:theArray
+end putOnClipboard:
+```
+-----
+
+## front most application
+```
+set myAppName to name of (get path to me)
+tell application "System Events"
+   set frontApp to name of first process whose frontmost is true
+   if frontApp is myAppName then
+       set visible of process myAppName to false
+   end if
+end tell
+```
+-----
+
+
+## Create an automator service to access selected text
+```
+on run {input}
+    tell application "Keyboard Maestro Engine"
+        setvariable "Selection" to input
+    end tell
+    
+end run
+``` Then run it in KM "Select menu in front application" Menu Item: Send Selection to Keyboard maestro
+
 
 ```
 on alfred_script(q)
@@ -26,23 +592,27 @@ tell application "Terminal"
     do script "cd " & finderPath
 end tell
 end alfred_script```
-
-#open application
+----
+# open application
 ```open -a AppDelete {query}```
-
+----
 #call a script
 ```osascript create_zip_archive_file.scpt```
-
+----
 ##Python ask alfred to search
-```#PopSnipCommand = """osascript -e 'tell application "Alfred 2" to search "snip bsnip"'"""```
-
+```
+----
+#PopSnipCommand = """osascript -e 'tell application "Alfred 2" to search "snip bsnip"'"""
+```
+----
 ##Python import library
 ```import subprocess,os,re,pickle```
-
+----
 ##Python get clipboard data
 ```def getClipboardData():
     return subprocess.check_output(
     'pbpaste', env={'LANG': 'en_US.UTF-8'}).decode('utf-8')```
+----
 ##Python paste clipboard
 ``` def setClipboardData(data):
     process = subprocess.Popen(
@@ -78,6 +648,7 @@ end alfred_script```
         return thisPath
     end tell
 end alfred_script```
+----
 
 #shell Copy ssh public
 ```
