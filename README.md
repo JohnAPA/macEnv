@@ -79,7 +79,7 @@
 -- Express
 - Python 3
 - icalbuddy
--homebrew
+- homebrew
 - mosquitto
 - zsh
 - oh my zsh
@@ -88,6 +88,8 @@
 - iterm shell integration
  - jq
  - duti
+ - zsh osx keychain
+ - zshz
 
 ## Sublime Text Packages
 - Sublime Code Intel
