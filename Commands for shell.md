@@ -34,15 +34,15 @@ date >> filename
 ​```
 OR
 ​```
-
+```
 printf "text here" >> file
 date >> file
 ## 
 printf "\nTEXT HERE\n$(ls)" >> lists.txt
 ```
 
-**Variables **
 
+**Variables **
 ```shell
 variable_name=$(command)
 variable_name=$(command [option ...] arg1 arg2 ...)
