@@ -164,3 +164,25 @@
 - Contacts
 - Pub/SSH
 - Aliases functions
+
+
+----
+# This is how to select words in mac for text manipulation
+Create this directory if it doesn't already exist
+```~/Library/KeyBindings/DefaultKeyBinding.dict```
+In that file paste: 
+```
+{
+  "~w" = (selectWord:);
+  "~p" = (selectParagraph:);
+  "^~w" = (selectWord:, cut:);
+  "^~p" = (selectParagraph:, cut:);
+}
+```
+Then you can use: 
+   alt + w to select word
+   alt + p to select paragraph
+   alt + ctrl + w to cut word
+   alt + ctrl + p to cut paragraph
+There used to be a link: http://osxnotes.net/keybindings.html which had more keybindings. 
+You can also use keyboard maestro with "Select a word.kmmacros
